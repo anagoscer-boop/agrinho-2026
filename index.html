@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoAgro: Missão Futuro - Agrinho 2026</title>
+    <style>
+        /* --- ESTILIZAÇÃO (CSS) --- */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #222;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Container do Jogo (Simulando a tela do Pygame) */
+        #tela-jogo {
+            width: 800px;
+            height: 600px;
+            background-color: #228B22; /* Verde Mato */
+            position: relative;
+            overflow: hidden;
+            border: 4px solid #fff;
+            border-radius: 8px;
+            box-shadow: 0px 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* Placar de Status */
+        .placar {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+
+        #lucro {
+            top: 60px;
+        }
+
+        /* Painel de Tomada de Decisão */
+        .painel-decisoes {
+            position: absolute;
+            top: 180px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            width: 90%;
+        }
+
+        .titulo-painel {
+            font-size: 22px;
+            color: #000;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /* Botões de Escolha */
+        .btn {
+            padding: 15px 25px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            transition: 0.2s;
+            box-shadow: 0px 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .btn-eco {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .btn-eco:hover { background-color: #45a049; }
+
+        .btn-poluente {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .btn-poluente:hover { background-color: #da190b; }
+
+        /* O Rio Preservado (Fundo da Tela) */
+        #rio {
+            width: 100%;
+            height: 100px;
+            background-color: #4682B4; /* Azul Rio */
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="tela-jogo">
+        <div id="sustentabilidade" class="placar">Sustentabilidade: 50%</div>
+        <div id="lucro" class="placar">Moedas: $100</div>
+
+        <div class="painel-decisoes">
+            <div class="titulo-painel">Escolha a sua estratégia de manejo:</div>
+            <button class="btn btn-eco" onclick="escolhaEcologica()">[1] Drone Biológico (-$5, +10 Eco)</button>
+            <button class="btn btn-poluente" onclick="escolhaPoluente()">[2] Agrotóxico em Excesso (+$20, -15 Eco)</button>
+        </div>
+
+        <div id="rio">Rio Preservado</div>
+    </div>
+
+    <script>
+        // Variáveis do Jogo
+        let pontosSustentabilidade = 50;
+        let moedasLucro = 100;
+
+        // Elementos do HTML que vamos atualizar
+        const txtSustentabilidade = document.getElementById('sustentabilidade');
+        const txtLucro = document.getElementById('lucro');
+        const elementoRio = document.getElementById('rio');
+
+        // Função para atualizar o texto na tela
+        function atualizarPainel() {
+            // Garante que a sustentabilidade fique entre 0 e 100
+            pontosSustentabilidade = Math.max(0, Math.min(100, pontosSustentabilidade));
+
+            txtSustentabilidade.innerText = `Sustentabilidade: ${pontosSustentabilidade}%`;
+            txtLucro.innerText = `Moedas: $${moedasLucro}`;
+
+            // Efeito visual: Se a sustentabilidade cair muito, o rio muda de cor!
+            if (pontosSustentabilidade < 30) {
+                elementoRio.style.backgroundColor = "#708090"; // Cinza poluído
+                elementoRio.innerText = "Rio Poluído!";
+            } else {
+                elementoRio.style.backgroundColor = "#4682B4"; // Azul limpo
+                elementoRio.innerText = "Rio Preservado";
+            }
+        }
+
+        // Ação do Botão Ecológico
+        function escolhaEcologica() {
+            pontosSustentabilidade += 10;
+            moedasLucro -= 5;
+            atualizarPainel();
+        }
+
+        // Ação do Botão Poluente
+        function escolhaPoluente() {
+            pontosSustentabilidade -= 15;
+            moedasLucro += 20;
+            atualizarPainel();
+        }
+
+        // Escutar o teclado também (para manter igual ao Pygame!)
+        document.addEventListener('keydown', function(evento) {
+            if (evento.key === '1') {
+                escolhaEcologica();
+            } else if (evento.key === '2') {
+                escolhaPoluente();
+            }
+        });
+    </script>
+</body>
+</html>
